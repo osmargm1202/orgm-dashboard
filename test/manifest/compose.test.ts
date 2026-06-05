@@ -1,8 +1,9 @@
 import { describe, expect, test } from 'vitest'
 import { filterByVisibility, getServiceById, groupedBySection } from '../../src/lib/manifest/compose'
+import type { ServiceRecord } from '../../src/lib/manifest/types'
 
 describe('manifest compose helpers', () => {
-  const services = [
+  const services: ServiceRecord[] = [
     {
       id: 'svc-a',
       name: 'Service A',
