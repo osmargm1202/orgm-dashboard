@@ -1,16 +1,16 @@
 ---
+import type { RenderService } from './ServiceCard.astro'
 import CopyableSnippet from '../forms/CopyableSnippet.astro'
 import ServiceEditPanel from '../forms/ServiceEditPanel.astro'
-import type { RenderService } from './ServiceCard.astro'
 
 interface Props {
-  services: RenderService[]
+  services?: RenderService[]
 }
 
-const { services } = Astro.props as Props
+const { services = [] } = Astro.props as Props
 ---
 
-<section class="overlay-editor" id="overlay-editor">
+<section class="overlay-editor" id="overlay-editor" data-overlay-editor>
   <details class="panel">
     <summary>
       <strong>Overlay editor</strong>

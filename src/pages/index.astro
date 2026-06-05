@@ -1,46 +1,21 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import DashboardShell from '../components/dashboard/DashboardShell.astro'
-import { groupServices } from '../lib/services/grouping'
-import { resolveServiceAssets } from '../lib/assets/resolver'
-import { resolveServicePrimaryLink } from '../lib/manifest/link-policy'
-import { loadManifest } from '../lib/manifest/loader'
-import type { RenderService } from '../components/dashboard/ServiceCard.astro'
-import overlayClientScript from '../scripts/overlay-editor.ts?url'
+import runtimeDashboardScript from '../scripts/dashboard-runtime.ts?url'
 
-const manifest = await loadManifest()
-
-const groupedServices = groupServices(manifest.services)
-
-const renderedSections = groupedServices.map((group) => ({
-  section: group.section,
-  services: group.services.map((service): RenderService => ({
-    service,
-    primaryLink: resolveServicePrimaryLink(service),
-    assets: resolveServiceAssets(service.assetRef, service.name),
-  })),
-}))
-
-const flatServices: RenderService[] = renderedSections.flatMap((entry) => entry.services)
-
-const allServices = manifest.services.length
-const initialPayload = {
-  manifest,
-  overlayCount: 0,
-  source: 'mounted',
+const runtimeSeed = {
+  source: 'loading',
 }
 ---
 
 <BaseLayout
   title="ORGM Dashboard"
   subtitle="Corporate Atlas Command Center"
-  serviceCount={allServices}
+  serviceCount={0}
   overlayCount={0}
-  source={initialPayload.source}
-  manifestGeneratedAt={manifest.generatedAt}
-  manifestEnvironment={manifest.environment}
+  source={runtimeSeed.source}
 >
-  <script id="dashboard-data" type="application/json" is:inline>{JSON.stringify(initialPayload).replace(/</g, '\\u003c')}</script>
-  <DashboardShell sections={renderedSections} allServices={flatServices} />
-  <script type="module" src={overlayClientScript} is:inline></script>
+  <DashboardShell />
+  <script id="dashboard-data" type="application/json" is:inline>{JSON.stringify(runtimeSeed).replace(/</g, '\\u003c')}</script>
+  <script type="module" src={runtimeDashboardScript} is:inline></script>
 </BaseLayout>

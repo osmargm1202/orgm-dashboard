@@ -246,7 +246,7 @@ function bindSelectorJump(): void {
   })
 }
 
-function init(): void {
+export function initOverlayEditor(): void {
   const payload = loadOverlayFromStorage()
   writeOverlayPreview(payload)
 
@@ -257,10 +257,3 @@ function init(): void {
   bindSubmit()
 }
 
-if (typeof window !== 'undefined') {
-  if (document.readyState === 'loading') {
-    window.addEventListener('DOMContentLoaded', init)
-  } else {
-    init()
-  }
-}

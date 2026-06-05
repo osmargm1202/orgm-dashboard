@@ -44,11 +44,17 @@ const {
         <h1>{title}</h1>
         <p class="meta-row">
           <span>{subtitle}</span>
-          {manifestGeneratedAt ? <span>· generated {manifestGeneratedAt}</span> : null}
-          <span>· source {source}</span>
-          {serviceCount !== undefined ? <span>· services {serviceCount}</span> : null}
-          {overlayCount !== undefined ? <span>· overlays <span id="overlay-count">{overlayCount}</span></span> : null}
-          {manifestEnvironment ? <span>· env {manifestEnvironment}</span> : null}
+          <span>· generated <span id="manifest-generated-at">{manifestGeneratedAt ?? 'loading'}</span></span>
+          <span>· source <span id="manifest-source">{source}</span></span>
+          {serviceCount !== undefined ? (
+            <span>
+              · services <span id="manifest-service-count">{serviceCount}</span>
+            </span>
+          ) : null}
+          {overlayCount !== undefined ? (
+            <span>· overlays <span id="overlay-count">{overlayCount}</span></span>
+          ) : null}
+          <span>· env <span id="manifest-environment">{manifestEnvironment ?? 'loading'}</span></span>
         </p>
       </section>
       <slot />
