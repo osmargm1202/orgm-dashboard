@@ -1,0 +1,15 @@
+services:
+  orgm-dashboard:
+    # Optional local/host deployment overrides.
+    volumes:
+      - ./config:/app/dist/config:ro
+      - ./assets:/app/dist/config/assets:ro
+    # Optional Traefik labels example (copy and adjust hostnames as needed):
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.orgm-dashboard.rule=Host(`dashboard.local`)"
+    #   - "traefik.http.services.orgm-dashboard.loadbalancer.server.port=4321"
+
+    # If your stack expects host-only access, prefer explicit binding:
+    # ports:
+    #   - "127.0.0.1:4321:4321"

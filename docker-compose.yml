@@ -1,0 +1,17 @@
+services:
+  orgm-dashboard:
+    build: .
+    ports:
+      - "4321:4321"
+    volumes:
+      - ./config:/app/dist/config:ro
+      - ./assets:/app/dist/config/assets:ro
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - wget -qO- http://127.0.0.1:4321/ > /dev/null
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
