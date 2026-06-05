@@ -1,0 +1,48 @@
+:root {
+  --font-sans: Inter, 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Ubuntu', 'Noto Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SFMono-Regular', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+
+  --surface-000: #05070f;
+  --surface-010: #090f1d;
+  --surface-020: #0f1730;
+  --surface-030: #162447;
+  --surface-040: #1c2e56;
+  --surface-050: #24365f;
+
+  --text-primary: #e6edff;
+  --text-secondary: #9db0da;
+  --text-muted: #7e93bf;
+
+  --command-blue: #2ea5ff;
+  --command-blue-soft: #79c7ff;
+  --command-accent: #63f7ff;
+  --command-link: #72d7ff;
+
+  --border-strong: #2e4872;
+  --border-soft: #29406a;
+  --panel-glow: rgba(49, 164, 255, 0.36);
+
+  --status-running-bg: rgba(42, 206, 132, 0.22);
+  --status-running-fg: #86ffcf;
+  --status-running-border: rgba(53, 226, 145, 0.5);
+
+  --status-unknown-bg: rgba(255, 191, 99, 0.2);
+  --status-unknown-fg: #ffe0a3;
+  --status-unknown-border: rgba(255, 191, 99, 0.55);
+
+  --status-error-bg: rgba(255, 112, 112, 0.2);
+  --status-error-fg: #ffb0b0;
+  --status-error-border: rgba(255, 112, 112, 0.56);
+
+  --status-badge-bg: rgba(43, 78, 136, 0.24);
+  --status-badge-fg: #b7cbff;
+
+  --atlas-line: rgba(101, 154, 255, 0.18);
+  --atlas-line-strong: rgba(110, 170, 255, 0.36);
+
+  --focus-ring: 0 0 0 2px rgba(48, 156, 255, 0.32), 0 0 0 4px rgba(48, 156, 255, 0.14);
+
+  --section-padding: 0.95rem;
+  --card-padding: 0.78rem;
+  --line-height-tight: 1.32;
+}
