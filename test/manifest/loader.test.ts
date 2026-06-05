@@ -1,0 +1,71 @@
+import { beforeEach, describe, expect, test, vi } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { loadDashboardManifest } from '../../src/lib/manifest/loader'
+
+const validManifest = JSON.parse(
+  readFileSync(join(process.cwd(), 'public/config/dashboard.base.example.json'), 'utf8'),
+)
+
+describe('manifest loader', () => {
+  const fetchSpy = vi.spyOn(globalThis, 'fetch')
+
+  beforeEach(() => {
+    fetchSpy.mockReset()
+  })
+
+  function makeResponse(jsonValue: unknown, status = 200, statusText = 'OK', ok = true): Response {
+    return {
+      ok,
+      status,
+      statusText,
+      headers: new Headers(),
+      redirected: false,
+      type: 'basic',
+      url: '/config/dashboard.base.json',
+      body: null,
+      bodyUsed: false,
+      arrayBuffer: vi.fn(),
+      blob: vi.fn(),
+      bytes: vi.fn(),
+      clone: vi.fn(),
+      formData: vi.fn(),
+      json: vi.fn().mockResolvedValue(jsonValue),
+      text: vi.fn().mockResolvedValue(''),
+    } as unknown as Response
+  }
+
+  test('loads and parses manifest JSON from dashboard.base.json', async () => {
+    fetchSpy.mockResolvedValue(makeResponse(validManifest))
+
+    const manifest = await loadDashboardManifest()
+
+    expect(fetchSpy).toHaveBeenCalledWith('/config/dashboard.base.json')
+    expect(manifest.project).toBe(validManifest.project)
+    expect(manifest.services[0]).toMatchObject({
+      id: validManifest.services[0].id,
+    })
+  })
+
+  test('throws on HTTP error response', async () => {
+    fetchSpy.mockResolvedValue(makeResponse({}, 500, 'Server error', false))
+
+    await expect(loadDashboardManifest()).rejects.toThrow(
+      'Failed to fetch dashboard manifest from /config/dashboard.base.json: 500 Server error',
+    )
+  })
+
+  test('throws on manifest parse error', async () => {
+    fetchSpy.mockResolvedValue(makeResponse({ project: 'bad', services: [] }))
+
+    await expect(loadDashboardManifest()).rejects.toThrow(/Invalid dashboard manifest from \/config\/dashboard\.base\.json/)
+  })
+
+  test('throws on network failure', async () => {
+    fetchSpy.mockRejectedValue(new Error('network down'))
+
+    await expect(loadDashboardManifest()).rejects.toThrow(
+      'Failed to fetch dashboard manifest from /config/dashboard.base.json: network down',
+    )
+  })
+})
