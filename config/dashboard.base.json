@@ -1,0 +1,614 @@
+{
+  "manifestVersion": "1.0",
+  "generatedAt": "2026-06-05T00:00:00Z",
+  "generatedFrom": "base.md",
+  "project": "ORGM Dashboard",
+  "environment": "discovery-snapshot",
+  "defaultUrlPolicy": "placeholder",
+  "services": [
+    {
+      "id": "dagendang-web",
+      "name": "Dagendang Web",
+      "description": "Dagendang frontend service discovered from docker compose inventory.",
+      "group": "public-services",
+      "containerName": "dagendang-web",
+      "image": "orgmcr.or-gm.com/osmargm1202/dagendang:v2",
+      "status": "running",
+      "networks": ["nginx_proxy_network"],
+      "ports": [
+        { "host": "127.0.0.1", "hostPort": 3010, "containerPort": 3000, "protocol": "tcp" }
+      ],
+      "urlHints": ["https://admin.dagendang.com", "https://dagendang.com"],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:3010",
+      "sameNetworkUrl": "http://dagendang-web:3000",
+      "visibility": "public-candidate",
+      "assetRef": {
+        "logoRef": "assets/logos/dagendang.svg",
+        "iconRef": "assets/icons/dagendang.svg"
+      }
+    },
+    {
+      "id": "msg-orgm",
+      "name": "Msg ORGM",
+      "description": "Message / chat service.",
+      "group": "public-services",
+      "containerName": "msg-orgm",
+      "image": "orgmcr.or-gm.com/osmargm1202/msg-orgm:v1",
+      "status": "running",
+      "networks": ["nginx_proxy_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 4321, "containerPort": 4321, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:4321",
+      "sameNetworkUrl": "http://msg-orgm:4321",
+      "visibility": "public-candidate",
+      "assetRef": {
+        "logoRef": "assets/logos/msg-orgm.svg",
+        "iconRef": "assets/icons/msg-orgm.svg"
+      }
+    },
+    {
+      "id": "filebrowser",
+      "name": "File Browser",
+      "description": "Managed file browser interface.",
+      "group": "internal-tools",
+      "containerName": "filebrowser",
+      "image": "docker.io/filebrowser/filebrowser:s6",
+      "status": "running",
+      "networks": ["nginx_proxy_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 8084, "containerPort": 80, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:8084",
+      "sameNetworkUrl": "http://filebrowser:80",
+      "visibility": "internal-first",
+      "assetRef": {
+        "logoRef": "assets/logos/filebrowser.svg",
+        "iconRef": "assets/icons/filebrowser.svg"
+      }
+    },
+    {
+      "id": "librechat",
+      "name": "LibreChat",
+      "description": "Chat orchestrator service.",
+      "group": "public-services",
+      "containerName": "LibreChat",
+      "image": "ghcr.io/danny-avila/librechat-dev:latest",
+      "status": "running",
+      "networks": ["librechat_default", "nginx_proxy_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 3080, "containerPort": 3080, "protocol": "tcp" }
+      ],
+      "urlHints": ["HOST=0.0.0.0"],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:3080",
+      "sameNetworkUrl": "http://LibreChat:3080",
+      "visibility": "public-candidate",
+      "assetRef": {
+        "logoRef": "assets/logos/librechat.svg",
+        "iconRef": "assets/icons/librechat.svg"
+      }
+    },
+    {
+      "id": "nginx-proxy-manager",
+      "name": "Nginx Proxy Manager",
+      "description": "Reverse proxy and TLS frontend.",
+      "group": "infrastructure",
+      "containerName": "nginx-proxy-manager",
+      "image": "jc21/nginx-proxy-manager:latest",
+      "status": "running",
+      "networks": ["nginx_proxy_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 80, "containerPort": 80, "protocol": "tcp" },
+        { "host": "0.0.0.0", "hostPort": 81, "containerPort": 81, "protocol": "tcp" },
+        { "host": "0.0.0.0", "hostPort": 443, "containerPort": 443, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "https://127.0.0.1",
+      "sameNetworkUrl": "https://nginx-proxy-manager",
+      "visibility": "infra-only",
+      "assetRef": {
+        "logoRef": "assets/logos/nginx-proxy-manager.svg",
+        "iconRef": "assets/icons/nginx-proxy-manager.svg"
+      }
+    },
+    {
+      "id": "n8n",
+      "name": "n8n",
+      "description": "Low-code workflow automation.",
+      "group": "internal-tools",
+      "containerName": "n8n",
+      "image": "docker.n8n.io/n8nio/n8n:latest",
+      "status": "running",
+      "networks": ["nginx_proxy_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 5678, "containerPort": 5678, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:5678",
+      "sameNetworkUrl": "http://n8n:5678",
+      "visibility": "public-candidate",
+      "assetRef": {
+        "logoRef": "assets/logos/n8n.svg",
+        "iconRef": "assets/icons/n8n.svg"
+      }
+    },
+    {
+      "id": "open-webui",
+      "name": "Open WebUI",
+      "description": "OpenAI/LLM chat interface.",
+      "group": "public-services",
+      "containerName": "open_webui",
+      "image": "ghcr.io/open-webui/open-webui:main",
+      "status": "running",
+      "networks": ["bridge", "nginx_proxy_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 3008, "containerPort": 8080, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:3008",
+      "sameNetworkUrl": "http://open_webui:8080",
+      "visibility": "public-candidate",
+      "assetRef": {
+        "logoRef": "assets/logos/open-webui.svg",
+        "iconRef": "assets/icons/open-webui.svg"
+      }
+    },
+    {
+      "id": "uptime-kuma",
+      "name": "Uptime Kuma",
+      "description": "Service health monitoring dashboard.",
+      "group": "ops",
+      "containerName": "uptime-kuma",
+      "image": "louislam/uptime-kuma:2",
+      "status": "running",
+      "networks": ["nginx_proxy_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 3001, "containerPort": 3001, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:3001",
+      "sameNetworkUrl": "http://uptime-kuma:3001",
+      "visibility": "public-candidate",
+      "assetRef": {
+        "logoRef": "assets/logos/uptime-kuma.svg",
+        "iconRef": "assets/icons/uptime-kuma.svg"
+      }
+    },
+    {
+      "id": "pyload",
+      "name": "pyLoad",
+      "description": "Download manager.",
+      "group": "internal-tools",
+      "containerName": "pyload",
+      "image": "lscr.io/linuxserver/pyload-ng:latest",
+      "status": "running",
+      "networks": ["bridge", "nginx_proxy_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 9666, "containerPort": 7227, "protocol": "tcp" },
+        { "host": "0.0.0.0", "hostPort": 8001, "containerPort": 8000, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:8001",
+      "sameNetworkUrl": "http://pyload:8000",
+      "visibility": "internal-first",
+      "assetRef": {
+        "logoRef": "assets/logos/pyload.svg",
+        "iconRef": "assets/icons/pyload.svg"
+      }
+    },
+    {
+      "id": "dagendang-strapi",
+      "name": "Dagendang Strapi",
+      "description": "Dagendang CMS/API backend.",
+      "group": "platform",
+      "containerName": "dagendang-strapi",
+      "image": "dagendang-dagendang-strapi:latest",
+      "status": "running",
+      "networks": ["dagendang-network", "nginx_proxy_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 1337, "containerPort": 1337, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:1337",
+      "sameNetworkUrl": "http://dagendang-strapi:1337",
+      "visibility": "platform-core",
+      "assetRef": {
+        "logoRef": "assets/logos/dagendang-strapi.svg",
+        "iconRef": "assets/icons/dagendang-strapi.svg"
+      }
+    },
+    {
+      "id": "insforge",
+      "name": "Insforge",
+      "description": "Insforge service interface.",
+      "group": "public-services",
+      "containerName": "insforge-insforge-1",
+      "image": "ghcr.io/insforge/insforge-oss:v1.5.0",
+      "status": "running",
+      "networks": ["insforge_insforge-internal", "nginx-proxy-network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 7130, "containerPort": 7130, "protocol": "tcp" },
+        { "host": "0.0.0.0", "hostPort": 7131, "containerPort": 7131, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:7130",
+      "sameNetworkUrl": "http://insforge-insforge-1:7130",
+      "visibility": "public-candidate",
+      "assetRef": {
+        "logoRef": "assets/logos/insforge.svg",
+        "iconRef": "assets/icons/insforge.svg"
+      }
+    },
+    {
+      "id": "pihole",
+      "name": "Pi-hole",
+      "description": "DNS ad-blocking and web admin.",
+      "group": "infrastructure",
+      "containerName": "pihole",
+      "image": "pihole/pihole:latest",
+      "status": "running",
+      "networks": ["nginx_proxy_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 53, "containerPort": 53, "protocol": "tcp" },
+        { "host": "0.0.0.0", "hostPort": 53, "containerPort": 53, "protocol": "udp" },
+        { "host": "0.0.0.0", "hostPort": 8086, "containerPort": 80, "protocol": "tcp" },
+        { "host": "0.0.0.0", "hostPort": 8443, "containerPort": 443, "protocol": "tcp" }
+      ],
+      "urlHints": ["DNS only service for 10.0.0.13 context"],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:8086",
+      "sameNetworkUrl": "http://pihole:80",
+      "visibility": "infra-only",
+      "assetRef": {
+        "logoRef": "assets/logos/pihole.svg",
+        "iconRef": "assets/icons/pihole.svg"
+      }
+    },
+    {
+      "id": "homepage",
+      "name": "Homepage",
+      "description": "Existing service index currently running on host port 3000.",
+      "group": "reference",
+      "containerName": "homepage",
+      "image": "ghcr.io/gethomepage/homepage:latest",
+      "status": "running",
+      "networks": ["nginx_proxy_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 3000, "containerPort": 3000, "protocol": "tcp" }
+      ],
+      "urlHints": ["HOMEPAGE_ALLOWED_HOSTS=*"],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:3000",
+      "sameNetworkUrl": "http://homepage:3000",
+      "visibility": "public-candidate",
+      "assetRef": {
+        "logoRef": "assets/logos/homepage.svg",
+        "iconRef": "assets/icons/homepage.svg"
+      }
+    },
+    {
+      "id": "radisson-paneles",
+      "name": "Radisson Paneles",
+      "description": "Business site/application for Radisson.",
+      "group": "public-services",
+      "containerName": "radisson-paneles",
+      "image": "orgmcr.or-gm.com/radisson-paneles:v1",
+      "status": "running",
+      "networks": ["bridge", "nginx_proxy_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 8080, "containerPort": 80, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:8080",
+      "sameNetworkUrl": "http://radisson-paneles:80",
+      "visibility": "public-candidate",
+      "assetRef": {
+        "logoRef": "assets/logos/radisson-paneles.svg",
+        "iconRef": "assets/icons/radisson-paneles.svg"
+      }
+    },
+    {
+      "id": "adminer",
+      "name": "Adminer",
+      "description": "Database admin utility.",
+      "group": "internal-tools",
+      "containerName": "adminer",
+      "image": "adminer:latest",
+      "status": "running",
+      "networks": ["db_proxy_network", "nginx_proxy_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 8081, "containerPort": 8080, "protocol": "tcp" }
+      ],
+      "urlHints": ["ADMINER_DEFAULT_SERVER=172.20.0.3"],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:8081",
+      "sameNetworkUrl": "http://adminer:8080",
+      "visibility": "internal-only",
+      "assetRef": {
+        "logoRef": "assets/logos/adminer.svg",
+        "iconRef": "assets/icons/adminer.svg"
+      }
+    },
+    {
+      "id": "vaultwarden",
+      "name": "Vaultwarden",
+      "description": "Self-hosted credentials manager.",
+      "group": "internal-services",
+      "containerName": "vaultwarden",
+      "image": "vaultwarden/server:latest",
+      "status": "running",
+      "networks": ["nginx_proxy_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 8088, "containerPort": 80, "protocol": "tcp" }
+      ],
+      "urlHints": ["https://vw.or-gm.com"],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "https://127.0.0.1:8088",
+      "sameNetworkUrl": "https://vaultwarden",
+      "visibility": "public-candidate",
+      "assetRef": {
+        "logoRef": "assets/logos/vaultwarden.svg",
+        "iconRef": "assets/icons/vaultwarden.svg"
+      }
+    },
+    {
+      "id": "healthchecks",
+      "name": "Healthchecks",
+      "description": "Heartbeat and uptime endpoint monitor.",
+      "group": "ops",
+      "containerName": "healthchecks",
+      "image": "healthchecks/healthchecks:latest",
+      "status": "running",
+      "networks": ["healthchecks_default"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 8087, "containerPort": 8000, "protocol": "tcp" }
+      ],
+      "urlHints": ["https://hc.or-gm.com"],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:8087",
+      "sameNetworkUrl": "http://healthchecks:8000",
+      "visibility": "public-candidate",
+      "assetRef": {
+        "logoRef": "assets/logos/healthchecks.svg",
+        "iconRef": "assets/icons/healthchecks.svg"
+      }
+    },
+    {
+      "id": "immich-server",
+      "name": "Immich",
+      "description": "Photo management platform.",
+      "group": "public-services",
+      "containerName": "immich_server",
+      "image": "ghcr.io/immich-app/immich-server:v2",
+      "status": "running",
+      "networks": ["immich_default", "nginx_proxy_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 2283, "containerPort": 2283, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:2283",
+      "sameNetworkUrl": "http://immich_server:2283",
+      "visibility": "public-candidate",
+      "assetRef": {
+        "logoRef": "assets/logos/immich.svg",
+        "iconRef": "assets/icons/immich.svg"
+      }
+    },
+    {
+      "id": "webodm-webapp",
+      "name": "WebODM",
+      "description": "Photogrammetry web interface.",
+      "group": "public-services",
+      "containerName": "webapp",
+      "image": "opendronemap/webodm_webapp:latest",
+      "status": "running",
+      "networks": ["nginx_proxy_network", "webodm_default"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 8000, "containerPort": 8000, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:8000",
+      "sameNetworkUrl": "http://webapp:8000",
+      "visibility": "public-candidate",
+      "assetRef": {
+        "logoRef": "assets/logos/webodm.svg",
+        "iconRef": "assets/icons/webodm.svg"
+      }
+    },
+    {
+      "id": "romm",
+      "name": "ROMM",
+      "description": "Media/game catalog.",
+      "group": "public-services",
+      "containerName": "romm",
+      "image": "rommapp/romm:latest",
+      "status": "running",
+      "networks": ["bridge", "nginx_proxy_network", "romm_romm_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 8083, "containerPort": 8080, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:8083",
+      "sameNetworkUrl": "http://romm:8080",
+      "visibility": "public-candidate",
+      "assetRef": {
+        "logoRef": "assets/logos/romm.svg",
+        "iconRef": "assets/icons/romm.svg"
+      }
+    },
+    {
+      "id": "registry",
+      "name": "Registry",
+      "description": "Docker registry mirror.",
+      "group": "infrastructure",
+      "containerName": "registry",
+      "image": "registry:3.0.0",
+      "status": "running",
+      "networks": ["nginx_proxy_network"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 5000, "containerPort": 5000, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:5000",
+      "sameNetworkUrl": "http://registry:5000",
+      "visibility": "infrastructure",
+      "assetRef": {
+        "logoRef": "assets/logos/registry.svg",
+        "iconRef": "assets/icons/registry.svg"
+      }
+    },
+    {
+      "id": "appsmith",
+      "name": "Appsmith",
+      "description": "Low-code internal application builder.",
+      "group": "internal-tools",
+      "containerName": "appsmith",
+      "image": "appsmith/appsmith-ce:v1.73.1",
+      "status": "running",
+      "networks": ["big-bear-appsmith_default"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 1080, "containerPort": 80, "protocol": "tcp" },
+        { "host": "0.0.0.0", "hostPort": 10443, "containerPort": 443, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "https://127.0.0.1:10443",
+      "sameNetworkUrl": "https://appsmith:443",
+      "visibility": "internal-first",
+      "assetRef": {
+        "logoRef": "assets/logos/appsmith.svg",
+        "iconRef": "assets/icons/appsmith.svg"
+      }
+    },
+    {
+      "id": "dashy",
+      "name": "Dashy",
+      "description": "Portal style dashboard currently running on host 4000.",
+      "group": "reference",
+      "containerName": "dashy",
+      "image": "lissy93/dashy:3.1.0",
+      "status": "running",
+      "networks": ["big-bear-dashy_default"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 4000, "containerPort": 8080, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:4000",
+      "sameNetworkUrl": "http://dashy:8080",
+      "visibility": "internal-first",
+      "assetRef": {
+        "logoRef": "assets/logos/dashy.svg",
+        "iconRef": "assets/icons/dashy.svg"
+      }
+    },
+    {
+      "id": "twofa-auth",
+      "name": "2FAuth",
+      "description": "Two-factor authentication management.",
+      "group": "security",
+      "containerName": "2fauth",
+      "image": "2fauth/2fauth:5.4.3",
+      "status": "running",
+      "networks": ["bridge"],
+      "ports": [
+        { "host": "0.0.0.0", "hostPort": 8090, "containerPort": 8000, "protocol": "tcp" }
+      ],
+      "urlHints": ["APP_URL=http://localhost"],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:8090",
+      "sameNetworkUrl": "http://2fauth:8000",
+      "visibility": "internal-first",
+      "assetRef": {
+        "logoRef": "assets/logos/twofa.svg",
+        "iconRef": "assets/icons/twofa.svg"
+      }
+    },
+    {
+      "id": "watchtower",
+      "name": "Watchtower",
+      "description": "Container image updater.",
+      "group": "infrastructure",
+      "containerName": "watchtower",
+      "image": "containrrr/watchtower",
+      "status": "running",
+      "networks": ["nginx_proxy_network"],
+      "ports": [
+        { "host": "127.0.0.1", "hostPort": 8085, "containerPort": 8080, "protocol": "tcp" }
+      ],
+      "urlHints": [],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "http://127.0.0.1:8085",
+      "sameNetworkUrl": "http://watchtower:8080",
+      "visibility": "infra-only",
+      "assetRef": {
+        "logoRef": "assets/logos/watchtower.svg",
+        "iconRef": "assets/icons/watchtower.svg"
+      }
+    },
+    {
+      "id": "orgm-nextjs",
+      "name": "orgm-nextjs",
+      "description": "Core ORGM application stack entry.",
+      "group": "platform",
+      "containerName": "orgm_nextjs",
+      "image": "orgm-nextjs",
+      "status": "running",
+      "networks": [],
+      "ports": [],
+      "urlHints": ["https://api.or-gm.com"],
+      "finalUrl": null,
+      "publicUrl": "unknown",
+      "internalUrl": "internal-compose-only",
+      "sameNetworkUrl": "http://orgm_nextjs:80",
+      "visibility": "platform-core",
+      "assetRef": {
+        "logoRef": "assets/logos/orgm-nextjs.svg",
+        "iconRef": "assets/icons/orgm-nextjs.svg"
+      }
+    }
+  ]
+}
