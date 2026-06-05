@@ -7,6 +7,7 @@ export const VisibilitySchema = z.enum([
   'internal-first',
   'internal-only',
   'infra-only',
+  'infrastructure',
   'platform-core',
   'reference',
 ])

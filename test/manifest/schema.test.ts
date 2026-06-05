@@ -1,4 +1,6 @@
 import { describe, expect, test } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { ZodError } from 'zod'
 import type { DashboardManifest } from '../../src/lib/manifest/types'
 import {
@@ -81,6 +83,16 @@ describe('manifest schema', () => {
 
     expect(parsed.manifestVersion).toBe('1.0')
     expect(parsed.services).toHaveLength(2)
+  })
+
+  test('public dashboard manifest parses with infrastructure visibility', () => {
+    const raw = readFileSync(join(process.cwd(), 'public/config/dashboard.base.example.json'), 'utf8')
+    const manifest = JSON.parse(raw)
+    const parsed = parseDashboardManifest(manifest)
+    const infra = parsed.services.find((service) => service.visibility === 'infrastructure')
+
+    expect(infra).toBeDefined()
+    expect(infra?.id).toBe('registry')
   })
 
   test('finalUrl can be null and publicUrl can stay unknown', () => {

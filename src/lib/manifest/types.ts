@@ -4,6 +4,7 @@ export type Visibility =
   | 'internal-first'
   | 'internal-only'
   | 'infra-only'
+  | 'infrastructure'
   | 'platform-core'
   | 'reference'
 
