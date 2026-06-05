@@ -1,0 +1,15 @@
+---
+interface Props {
+  generatedAt?: string
+  environment?: string
+}
+
+const { generatedAt, environment } = Astro.props as Props
+---
+
+<footer>
+  <p>
+    {generatedAt ? `Generated ${generatedAt}` : 'Generated from mounted manifest'}
+    {environment ? ` · env ${environment}` : ''}
+  </p>
+</footer>

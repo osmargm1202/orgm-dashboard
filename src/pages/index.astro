@@ -1,185 +1,46 @@
 ---
-import { DASHBOARD_OVERLAY_KEY } from '../lib/overlay/constants'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import DashboardShell from '../components/dashboard/DashboardShell.astro'
 import { groupServices } from '../lib/services/grouping'
-import { resolveAssetChain, resolveServiceAssets } from '../lib/assets/resolver'
+import { resolveServiceAssets } from '../lib/assets/resolver'
 import { resolveServicePrimaryLink } from '../lib/manifest/link-policy'
 import { loadManifest } from '../lib/manifest/loader'
+import type { RenderService } from '../components/dashboard/ServiceCard.astro'
+import overlayClientScript from '../scripts/overlay-editor.ts?url'
 
 const manifest = await loadManifest()
-const initialSections = groupServices(manifest.services)
 
-const serverServices = manifest.services.map((service) => ({
-  ...service,
-  primaryLink: resolveServicePrimaryLink(service),
-  assets: resolveServiceAssets(service.assetRef, service.name),
-  assetChain: {
-    logo: resolveAssetChain(service.assetRef.logoRef, service.name),
-    icon: resolveAssetChain(service.assetRef.iconRef, service.name),
-    cover: service.assetRef.coverRef ? resolveAssetChain(service.assetRef.coverRef, service.name) : [],
-  },
+const groupedServices = groupServices(manifest.services)
+
+const renderedSections = groupedServices.map((group) => ({
+  section: group.section,
+  services: group.services.map((service): RenderService => ({
+    service,
+    primaryLink: resolveServicePrimaryLink(service),
+    assets: resolveServiceAssets(service.assetRef, service.name),
+  })),
 }))
 
+const flatServices: RenderService[] = renderedSections.flatMap((entry) => entry.services)
+
+const allServices = manifest.services.length
 const initialPayload = {
-  manifest: {
-    ...manifest,
-    services: serverServices,
-  },
+  manifest,
   overlayCount: 0,
   source: 'mounted',
 }
-
-const initialPayloadJson = JSON.stringify(initialPayload).replace(/</g, '\\u003c')
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>ORGM Dashboard</title>
-	</head>
-	<body>
-    <main>
-      <header>
-        <h1>ORGM Dashboard</h1>
-        <p>Mounted services: {manifest.services.length}</p>
-        <p>Overlay entries: <span id="overlay-count">{initialPayload.overlayCount}</span></p>
-      </header>
-
-      <section>
-        {initialSections.map((group) => (
-          <article>
-            <h2>{group.section}</h2>
-            <ul>
-              {group.services.map((service) => (
-                <li>
-                  <strong>{service.name}</strong> — {service.id}
-                </li>
-              ))}
-            </ul>
-          </article>
-        ))}
-      </section>
-
-      <section>
-        <pre id="dashboard-state">{initialPayloadJson}</pre>
-      </section>
-    </main>
-
-    <script is:inline id="dashboard-data" type="application/json">{initialPayloadJson}</script>
-
-    <script is:inline define:vars={{ overlayStorageKey: DASHBOARD_OVERLAY_KEY }}>
-      (function () {
-        const script = document.querySelector('#dashboard-data')
-        if (!script || !script.textContent) {
-          return
-        }
-
-        const basePayload = JSON.parse(script.textContent)
-        const overlayRaw = localStorage.getItem(overlayStorageKey)
-        let overlayPayload = {}
-
-        if (overlayRaw) {
-          try {
-            overlayPayload = JSON.parse(overlayRaw)
-          } catch (error) {
-            console.warn('Invalid overlay payload in localStorage', error)
-          }
-        }
-
-        const overlays = Array.isArray(overlayPayload.services) ? overlayPayload.services : []
-
-        const validOverlays = overlays.filter((entry) => {
-          return (
-            typeof entry === 'object' && entry !== null &&
-            typeof entry.id === 'string' &&
-            entry.id.length > 0
-          )
-        })
-
-        const overlayById = new Map()
-        const orderById = new Map()
-
-        for (const entry of validOverlays) {
-          overlayById.set(entry.id, entry)
-
-          if (
-            entry.order !== undefined &&
-            typeof entry.order === 'number' &&
-            Number.isInteger(entry.order) &&
-            entry.order >= 0
-          ) {
-            orderById.set(entry.id, entry.order)
-          }
-        }
-
-        const baseServices = basePayload.manifest.services
-        const baseIndex = new Map(baseServices.map((service, index) => [service.id, index]))
-
-        const merged = baseServices.map((service) => {
-          const patch = overlayById.get(service.id)
-
-          if (!patch) {
-            return service
-          }
-
-          const mergedService = { ...service }
-
-          for (const [key, value] of Object.entries(patch)) {
-            if (key === 'id' || key === 'order') {
-              continue
-            }
-
-            if (
-              mergedService[key] !== undefined &&
-              mergedService[key] !== null &&
-              value !== null &&
-              typeof mergedService[key] === 'object' &&
-              typeof value === 'object' &&
-              !Array.isArray(mergedService[key]) &&
-              !Array.isArray(value)
-            ) {
-              mergedService[key] = {
-                ...mergedService[key],
-                ...value,
-              }
-
-              continue
-            }
-
-            mergedService[key] = value
-          }
-
-          return mergedService
-        })
-
-        const fallbackOrder = (id) => orderById.get(id) ?? (baseIndex.get(id) ?? baseServices.length)
-
-        merged.sort((left, right) => {
-          const leftOrder = fallbackOrder(left.id)
-          const rightOrder = fallbackOrder(right.id)
-
-          if (leftOrder === rightOrder) {
-            return (baseIndex.get(left.id) ?? 0) - (baseIndex.get(right.id) ?? 0)
-          }
-
-          return leftOrder - rightOrder
-        })
-
-        const payload = {
-          ...basePayload,
-          manifest: {
-            ...basePayload.manifest,
-            services: merged,
-          },
-          overlayCount: validOverlays.length,
-        }
-
-        document.getElementById('overlay-count')?.replaceChildren(String(payload.overlayCount))
-        document.getElementById('dashboard-state')?.replaceChildren(JSON.stringify(payload, null, 2))
-      })()
-    </script>
-  </body>
-</html>
+<BaseLayout
+  title="ORGM Dashboard"
+  subtitle="Corporate Atlas Command Center"
+  serviceCount={allServices}
+  overlayCount={0}
+  source={initialPayload.source}
+  manifestGeneratedAt={manifest.generatedAt}
+  manifestEnvironment={manifest.environment}
+>
+  <script id="dashboard-data" type="application/json" is:inline>{JSON.stringify(initialPayload).replace(/</g, '\\u003c')}</script>
+  <DashboardShell sections={renderedSections} allServices={flatServices} />
+  <script type="module" src={overlayClientScript} is:inline></script>
+</BaseLayout>

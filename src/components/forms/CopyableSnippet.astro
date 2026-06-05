@@ -1,0 +1,17 @@
+---
+interface Props {
+  id: string
+  label: string
+  text: string
+}
+
+const { id, label, text } = Astro.props as Props
+---
+
+<div class="copyable-snippet">
+  <h3>{label}</h3>
+  <pre id={id}>{text}</pre>
+  <div class="overlay-editor__actions">
+    <button type="button" data-copy-target={id}>Copy to clipboard</button>
+  </div>
+</div>

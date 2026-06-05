@@ -1,0 +1,38 @@
+---
+import StatusBadge from './StatusBadge.astro'
+import ServiceLinks from './ServiceLinks.astro'
+import type { LinkResolution } from '../../lib/manifest/link-policy'
+import type { ResolvedServiceAssets } from '../../lib/assets/resolver'
+import type { ServiceRecord } from '../../lib/manifest/types'
+
+export interface RenderService {
+  service: ServiceRecord
+  primaryLink: LinkResolution
+  assets: ResolvedServiceAssets
+}
+
+const { service, primaryLink, assets } = Astro.props as RenderService
+
+const fallbackFromInitials = assets.logo.fallback === 'initials' || !assets.logo.url
+---
+
+<article class="service-card" data-service-id={service.id}>
+  <div class="service-card__header">
+    {fallbackFromInitials ? <span class="service-card__initials">{assets.initials}</span> : <img class="service-card__logo" src={assets.logo.url} alt="" loading="lazy" />}
+    <div>
+      <h3>{service.name}</h3>
+      <p class="meta-row">{service.id} · {service.containerName}</p>
+    </div>
+  </div>
+
+  <div class="service-card__body">
+    <StatusBadge status={service.status} />
+    <p>{service.description}</p>
+    <ServiceLinks primaryLink={primaryLink} visibility={service.visibility} serviceId={service.id} />
+
+    <div class="service-card__actions">
+      <button type="button" data-edit-trigger={service.id}>Edit service</button>
+      <button type="button" data-copy-service={service.id}>Copy entry</button>
+    </div>
+  </div>
+</article>

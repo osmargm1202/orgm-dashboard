@@ -1,0 +1,43 @@
+---
+import { getServiceLinkState } from './service-link-state'
+import VisibilityHint from './VisibilityHint.astro'
+import type { LinkResolution } from '../../lib/manifest/link-policy'
+import type { ServiceRecord } from '../../lib/manifest/types'
+
+interface Props {
+  primaryLink: LinkResolution
+  visibility: ServiceRecord['visibility']
+  serviceId: string
+}
+
+const { primaryLink, visibility, serviceId } = Astro.props as Props
+const linkState = getServiceLinkState(primaryLink)
+---
+
+<div class="service-card__links">
+  {linkState.isDisabled ? (
+    <button
+      class={`link-badge ${primaryLink.badgeClass}`}
+      type="button"
+      disabled
+      data-service-link={serviceId}
+      title={linkState.tooltip}
+      aria-disabled="true"
+    >
+      {linkState.buttonLabel}
+    </button>
+  ) : (
+    <a
+      href={linkState.href}
+      class={`link-badge ${primaryLink.badgeClass}`}
+      target={linkState.target}
+      rel="noopener noreferrer"
+      data-service-link={serviceId}
+      title={linkState.tooltip}
+      aria-disabled="false"
+    >
+      {primaryLink.linkLabel} · {primaryLink.url}
+    </a>
+  )}
+  <VisibilityHint linkLabel={primaryLink.linkLabel} visibility={visibility} isInternal={primaryLink.isInternal} />
+</div>

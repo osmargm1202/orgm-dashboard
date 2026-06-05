@@ -1,0 +1,36 @@
+---
+import CopyableSnippet from '../forms/CopyableSnippet.astro'
+import ServiceEditPanel from '../forms/ServiceEditPanel.astro'
+import type { RenderService } from './ServiceCard.astro'
+
+interface Props {
+  services: RenderService[]
+}
+
+const { services } = Astro.props as Props
+---
+
+<section class="overlay-editor" id="overlay-editor">
+  <details class="panel">
+    <summary>
+      <strong>Overlay editor</strong>
+      <span class="meta-row">localStorage browser overrides</span>
+    </summary>
+
+    <div class="overlay-editor__panel">
+      <label>
+        <span>Quick service selector</span>
+        <select id="service-selector">
+          <option value="">Select service</option>
+          {services.map((entry) => <option value={entry.service.id}>{entry.service.name}</option>)}
+        </select>
+      </label>
+
+      <CopyableSnippet id="overlay-export" label="Overlay payload" text="{}" />
+
+      <div class="overlay-editor__panels">
+        {services.map((entry) => <ServiceEditPanel service={entry.service} />)}
+      </div>
+    </div>
+  </details>
+</section>

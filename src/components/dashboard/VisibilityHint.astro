@@ -1,0 +1,19 @@
+---
+import type { LinkResolution } from '../../lib/manifest/link-policy'
+import type { ServiceRecord } from '../../lib/manifest/types'
+
+interface Props {
+  visibility: ServiceRecord['visibility']
+  linkLabel: LinkResolution['linkLabel']
+  isInternal: boolean
+}
+
+const { visibility, linkLabel, isInternal } = Astro.props as Props
+
+const showInternalOnly = linkLabel === 'internal-only link'
+const showSameNetwork = linkLabel !== 'internal-only link' && (visibility === 'internal-first' || visibility === 'infra-only')
+---
+
+{showInternalOnly ? <span class="hint-badge link-badge badge-internal">internal-only link</span> : null}
+{showSameNetwork ? <span class="hint-badge link-badge badge-internal">same-network only</span> : null}
+{isInternal && !showInternalOnly ? <span class="hint-badge link-badge badge-internal">internal path</span> : null}

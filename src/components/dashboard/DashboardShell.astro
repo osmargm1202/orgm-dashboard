@@ -1,0 +1,21 @@
+---
+import DashboardGroup from './ServiceGroup.astro'
+import OverlayEditor from './OverlayEditor.astro'
+import type { RenderService } from './ServiceCard.astro'
+
+interface Props {
+  sections: {
+    section: string
+    services: RenderService[]
+  }[]
+  allServices: RenderService[]
+}
+
+const { sections, allServices } = Astro.props as Props
+---
+
+<div class="section">
+  {sections.map((group) => <DashboardGroup title={group.section} services={group.services} />)}
+</div>
+
+<OverlayEditor services={allServices} />

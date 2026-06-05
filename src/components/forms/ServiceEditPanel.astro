@@ -1,0 +1,62 @@
+---
+import type { ServiceRecord } from '../../lib/manifest/types'
+
+interface Props {
+  service: ServiceRecord
+}
+
+const { service } = Astro.props as Props
+
+const visibilities: ServiceRecord['visibility'][] = [
+  'public-candidate',
+  'public',
+  'internal-first',
+  'internal-only',
+  'infra-only',
+  'infrastructure',
+  'platform-core',
+  'reference',
+]
+---
+
+<details class="service-edit-panel" data-service-edit id={service.id}>
+  <summary><strong>{service.name}</strong> ({service.id})</summary>
+  <form class="service-edit-form" data-service-id={service.id}>
+    <label>
+      <span>Name</span>
+      <input name="name" type="text" value={service.name} />
+    </label>
+
+    <label>
+      <span>Public URL</span>
+      <input name="publicUrl" type="url" value={service.publicUrl === 'unknown' ? '' : service.publicUrl} placeholder="https://example.com" />
+    </label>
+
+    <label>
+      <span>Final URL</span>
+      <input name="finalUrl" type="url" value={service.finalUrl ?? ''} placeholder="https://example.com" />
+    </label>
+
+    <label>
+      <span>Description</span>
+      <textarea name="description" rows="2">{service.description}</textarea>
+    </label>
+
+    <label>
+      <span>Visibility</span>
+      <select name="visibility">
+        {visibilities.map((visibility) => <option selected={visibility === service.visibility} value={visibility}>{visibility}</option>)}
+      </select>
+    </label>
+
+    <label>
+      <span>Order</span>
+      <input name="order" type="number" min="0" step="1" value={''} />
+    </label>
+
+    <div class="service-card__actions">
+      <button type="submit">Save override</button>
+      <button type="button" data-copy-service={service.id} class="button">Copy payload</button>
+    </div>
+  </form>
+</details>

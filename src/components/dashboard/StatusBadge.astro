@@ -1,0 +1,13 @@
+---
+import { getStatusBadge } from '../../lib/services/health'
+import type { ServiceRecord } from '../../lib/manifest/types'
+
+interface Props {
+  status: ServiceRecord['status']
+}
+
+const { status } = Astro.props as Props
+const badge = getStatusBadge(status)
+---
+
+<span class={`status-badge ${badge.badgeClass}`}>{badge.label}</span>

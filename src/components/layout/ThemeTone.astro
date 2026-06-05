@@ -1,0 +1,11 @@
+---
+interface Props {
+  tone?: 'command' | 'muted'
+}
+
+const { tone = 'command' } = Astro.props as Props
+---
+
+<div class="theme-tone" aria-label="theme tone">
+  <span>theme: {tone}</span>
+</div>

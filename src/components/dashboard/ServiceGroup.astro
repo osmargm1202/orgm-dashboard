@@ -1,0 +1,19 @@
+---
+import ServiceCard, { type RenderService } from './ServiceCard.astro'
+
+interface Props {
+  title: string
+  services: RenderService[]
+}
+
+const { title, services } = Astro.props as Props
+---
+
+<section class="section">
+  <div class="panel">
+    <h2>{title}</h2>
+    <div class="service-grid">
+      {services.length === 0 ? <p>No services in this section.</p> : services.map((service) => <ServiceCard {...service} />)}
+    </div>
+  </div>
+</section>
