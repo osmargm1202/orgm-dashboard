@@ -68,6 +68,8 @@ const initialPayloadJson = JSON.stringify(initialPayload).replace(/</g, '\\u003c
       </section>
     </main>
 
+    <script is:inline id="dashboard-data" type="application/json">{initialPayloadJson}</script>
+
     <script is:inline define:vars={{ overlayStorageKey: DASHBOARD_OVERLAY_KEY }}>
       (function () {
         const script = document.querySelector('#dashboard-data')
@@ -179,7 +181,5 @@ const initialPayloadJson = JSON.stringify(initialPayload).replace(/</g, '\\u003c
         document.getElementById('dashboard-state')?.replaceChildren(JSON.stringify(payload, null, 2))
       })()
     </script>
-
-    <script is:inline id="dashboard-data" type="application/json">{initialPayloadJson}</script>
   </body>
 </html>
