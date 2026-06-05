@@ -15,24 +15,14 @@ describe('manifest loader', () => {
   })
 
   function makeResponse(jsonValue: unknown, status = 200, statusText = 'OK', ok = true): Response {
-    return {
+    const response: Partial<Response> = {
       ok,
       status,
       statusText,
-      headers: new Headers(),
-      redirected: false,
-      type: 'basic',
-      url: '/config/dashboard.base.json',
-      body: null,
-      bodyUsed: false,
-      arrayBuffer: vi.fn(),
-      blob: vi.fn(),
-      bytes: vi.fn(),
-      clone: vi.fn(),
-      formData: vi.fn(),
       json: vi.fn().mockResolvedValue(jsonValue),
-      text: vi.fn().mockResolvedValue(''),
-    } as unknown as Response
+    }
+
+    return response as Response
   }
 
   test('loads and parses manifest JSON from dashboard.base.json', async () => {
