@@ -1,6 +1,6 @@
 # ORGM Dashboard assets contract
 
-Portable assets for `orgm-dashboard` live in this folder and are mounted at runtime under `/app/public/config/assets`.
+Portable assets for `orgm-dashboard` live in this folder and are mounted at runtime under `/app/dist/config/assets` (current Dockerfile/compose root).
 
 ## Purpose
 
@@ -20,10 +20,11 @@ Portable assets for `orgm-dashboard` live in this folder and are mounted at runt
 
 | Host path | Container path | Purpose |
 | --- | --- | --- |
-| `./config` | `/app/public/config` | Config files (`dashboard.base.json`, examples, generated outputs) |
-| `./assets` | `/app/public/config/assets` | All asset payload referenced by manifest |
+| `./config` | `/app/dist/config` | Config files (`dashboard.base.json`, examples, generated outputs) |
+| `./assets` | `/app/dist/config/assets` | All asset payload referenced by manifest |
 
 - Container root for resolver is `/config/assets` in runtime image, so references are written as e.g. `assets/logos/orgm.svg`.
+- Container serving root is `/app/dist`, so mounts must target that path.
 - Manifest refs must stay **relative**; never store absolute host paths in `assetRef`.
 
 ## Export and import matrix
@@ -118,6 +119,7 @@ PY
   - `assets/theme/.gitkeep`
 
 - If export destination differs, rerun check against mounted path after deployment.
+- If internal-only services are intentionally hidden, they still require `internalUrl`/`sameNetworkUrl` validity for internal users.
 
 ## Asset safety
 
